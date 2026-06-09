@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -131,7 +131,7 @@
 
 <body>
     <div class="container">
-        <h1>Flask + MySQL App [2 tier] - Junoon 🔥</h1>
+        <h1>Flask + MySQL App [2 tier] - Send Me Your Messages 🔥</h1>
 
         <div class="messages">
             {% for message in messages %}
@@ -179,6 +179,233 @@
             });
         });
     </script>
+</body>
+
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Chat App 🚀</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top, #1b1b2f, #0f0f1a);
+            color: #fff;
+            padding: 20px;
+        }
+
+        /* Animated background glow */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: #ff6a00;
+            filter: blur(150px);
+            top: -100px;
+            left: -100px;
+            opacity: 0.3;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: #00c6ff;
+            filter: blur(150px);
+            bottom: -100px;
+            right: -100px;
+            opacity: 0.3;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(18px);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff6a00, #ee0979, #00c6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .messages p {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .messages p:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #00c6ff;
+            box-shadow: 0 0 10px rgba(0, 198, 255, 0.4);
+        }
+
+        input[type="submit"] {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
+            transition: 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 106, 0, 0.4);
+        }
+
+        /* Scrollbar styling */
+        .messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(#ff6a00, #00c6ff);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            form {
+                flex-direction: column;
+            }
+
+            input[type="submit"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Flask + MySQL Chat App 💬</h1>
+
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message[0] }}</p>
+            {% endfor %}
+        </div>
+
+        <form id="messageForm">
+            <input type="text" name="new_message" placeholder="Type your message..." required>
+            <input type="submit" value="Send">
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#messageForm").on("submit", function (event) {
+                event.preventDefault();
+
+                let messageInput = $("input[name='new_message']");
+                let message = messageInput.val().trim();
+
+                if (!message) return;
+
+                $.ajax({
+                    url: "/submit",
+                    type: "POST",
+                    data: { new_message: message },
+                    success: function (response) {
+                        if (response && response.message) {
+                            $(".messages").append("<p>" + response.message + "</p>");
+                            messageInput.val("");
+                            $(".messages").scrollTop($(".messages")[0].scrollHeight);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>
